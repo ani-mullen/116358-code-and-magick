@@ -47,5 +47,3 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.fillText(name, chartStart + distance * i, 110 + chartHeight);
   }
 };
-var canvas = document.querySelector('canvas');
-window.renderStatistics(canvas.getContext('2d'), ['Вы', 'Дипп', 'Мейбл', 'Стен'], [2032, 3187, 2428, 4000]);
