@@ -1,11 +1,19 @@
 'use strict';
 
 var setup = document.querySelector('.setup');
+var userName = setup.querySelector('.setup-user-name');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = setup.querySelector('.setup-close');
 var wizardCoat = setup.querySelector('#wizard-coat');
 var wizardEyes = setup.querySelector('#wizard-eyes');
 var setupFireball = setup.querySelector('.setup-fireball-wrap');
+var setupSave = setup.querySelector('.setup-submit');
+
+userName.required = true;
+userName.maxLength = 50;
+
+var ENTER_KEY_CODE = 13;
+var ESCAPE_KEY_CODE = 27;
 
 var wizardCoatColors = [
   'rgb(101, 137, 164)',
@@ -32,27 +40,85 @@ var setupFireballColors = [
   '#e6e848'
 ];
 
-setupOpen.addEventListener('click', function () {
+// Функция определения ENTER_KEY_CODE
+var isActivateEvent = function (evt) {
+  return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
+};
+
+// Обработчик нажатий на клавиатуру в .setup
+var setupKeydownHandler = function (evt) {
+  if (evt.keyCode === ESCAPE_KEY_CODE) {
+    setup.classList.add('invisible');
+  }
+};
+
+// Фунция показа виджета
+var showSetupWidget = function () {
   setup.classList.remove('invisible');
-});
+  document.addEventListener('keydown', setupKeydownHandler);
+};
 
-setupClose.addEventListener('click', function () {
+// Фунция скрытия виджета
+var hideSetupWidget = function () {
   setup.classList.add('invisible');
+  document.removeEventListener('keydown', setupKeydownHandler);
+};
+
+// Функция изменения значения Aria роли
+var statusAriaRole = function (item) {
+  var pressed = (item.getAttribute('aria-pressed') === 'true');
+  item.setAttribute('aria-pressed', !pressed);
+};
+
+// Обработчик клика на иконку
+setupOpen.addEventListener('click', function () {
+  showSetupWidget();
+  statusAriaRole(setupOpen);
 });
 
+// Обработчик нажатия на иконку
+setupOpen.addEventListener('keydown', function (evt) {
+  if (isActivateEvent(evt)) {
+    showSetupWidget();
+    statusAriaRole(setupOpen);
+  }
+});
+
+// Функция закрытия виждета по нажатию или клику на кнопку
+var closeButton = function (nameButton) {
+  nameButton.addEventListener('click', function () {
+    hideSetupWidget();
+    statusAriaRole(nameButton);
+  });
+  nameButton.addEventListener('keydown', function (evt) {
+    if (isActivateEvent(evt)) {
+      hideSetupWidget();
+      statusAriaRole(nameButton);
+    }
+  });
+};
+
+closeButton(setupClose);
+closeButton(setupSave);
+
+// Функция изменения цвета svg-элемента
+var colorFill = function (element, arrayColors) {
+  var colorNumber = Math.floor(Math.random() * arrayColors.length);
+  element.style.fill = arrayColors[colorNumber];
+};
+
+// Обработчик клика на элемент #wizard-coat
 wizardCoat.addEventListener('click', function () {
-  var colorCoatNumber = Math.floor(Math.random() * wizardCoatColors.length);
-  wizardCoat.style.fill = wizardCoatColors[colorCoatNumber];
+  colorFill(wizardCoat, wizardCoatColors);
 });
 
+// Обработчик клика на элемент #wizard-eyes
 wizardEyes.addEventListener('click', function () {
-  var colorEyesNumber = Math.floor(Math.random() * wizardEyesColors.length);
-  wizardEyes.style.fill = wizardEyesColors[colorEyesNumber];
+  colorFill(wizardEyes, wizardEyesColors);
 });
 
+// Обработчик клика на элемент .setup-fireball-wrap
 setupFireball.addEventListener('click', function () {
   var colorFireballNumber = Math.floor(Math.random() * setupFireballColors.length);
   setupFireball.style.background = setupFireballColors[colorFireballNumber];
 });
-
-
