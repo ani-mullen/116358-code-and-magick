@@ -101,24 +101,6 @@ var closeButton = function (nameButton) {
 closeButton(setupClose);
 closeButton(setupSave);
 
-// Функция изменения цвета svg-элемента
-var colorFill = function (element, arrayColors) {
-  var colorNumber = Math.floor(Math.random() * arrayColors.length);
-  element.style.fill = arrayColors[colorNumber];
-};
-
-// Обработчик клика на элемент #wizard-coat
-wizardCoat.addEventListener('click', function () {
-  colorFill(wizardCoat, wizardCoatColors);
-});
-
-// Обработчик клика на элемент #wizard-eyes
-wizardEyes.addEventListener('click', function () {
-  colorFill(wizardEyes, wizardEyesColors);
-});
-
-// Обработчик клика на элемент .setup-fireball-wrap
-setupFireball.addEventListener('click', function () {
-  var colorFireballNumber = Math.floor(Math.random() * setupFireballColors.length);
-  setupFireball.style.background = setupFireballColors[colorFireballNumber];
-});
+window.colorizeElement(wizardCoat, wizardCoatColors, 'fill');
+window.colorizeElement(wizardEyes, wizardEyesColors, 'fill');
+window.colorizeElement(setupFireball, setupFireballColors, 'background');
