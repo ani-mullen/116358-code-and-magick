@@ -12,9 +12,6 @@ var setupSave = setup.querySelector('.setup-submit');
 userName.required = true;
 userName.maxLength = 50;
 
-var ENTER_KEY_CODE = 13;
-var ESCAPE_KEY_CODE = 27;
-
 var wizardCoatColors = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
@@ -41,16 +38,22 @@ var setupFireballColors = [
 ];
 
 // Функция определения ENTER_KEY_CODE
-var isActivateEvent = function (evt) {
-  return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
-};
+window.isActivateEvent = (function () {
+  var ENTER_KEY_CODE = 13;
+  return function (evt) {
+    return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
+  };
+})();
 
 // Обработчик нажатий на клавиатуру в .setup
-var setupKeydownHandler = function (evt) {
-  if (evt.keyCode === ESCAPE_KEY_CODE) {
-    setup.classList.add('invisible');
-  }
-};
+var setupKeydownHandler = (function () {
+  var ESCAPE_KEY_CODE = 27;
+  return function (evt) {
+    if (evt.keyCode === ESCAPE_KEY_CODE) {
+      setup.classList.add('invisible');
+    }
+  };
+})();
 
 // Фунция показа виджета
 var showSetupWidget = function () {
@@ -78,7 +81,7 @@ setupOpen.addEventListener('click', function () {
 
 // Обработчик нажатия на иконку
 setupOpen.addEventListener('keydown', function (evt) {
-  if (isActivateEvent(evt)) {
+  if (window.isActivateEvent(evt)) {
     showSetupWidget();
     statusAriaRole(setupOpen);
   }
@@ -91,7 +94,7 @@ var closeButton = function (nameButton) {
     statusAriaRole(nameButton);
   });
   nameButton.addEventListener('keydown', function (evt) {
-    if (isActivateEvent(evt)) {
+    if (window.isActivateEvent(evt)) {
       hideSetupWidget();
       statusAriaRole(nameButton);
     }
