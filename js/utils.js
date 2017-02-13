@@ -1,18 +1,20 @@
 'use strict';
 
-window.utils = {
-
+window.utils = (function () {
   // Случайный элемент массива
-  getRandomElement: function (array) {
+  var getRandomElement = function (array) {
     var randomElementIndex = Math.floor(Math.random() * array.length);
     return array[randomElementIndex];
-  },
-  // Случайный элемент, без повторения
-  getRandomElementExcept: function (array, element) {
-    var valueColor;
-    while (!valueColor || valueColor === element) {
-      valueColor = window.utils.getRandomElement(array);
+  };
+  return {
+    // Случайный элемент, без повторения
+    getRandomElement: getRandomElement,
+    getRandomElementExcept: function (array, element) {
+      var valueColor;
+      while (!valueColor || valueColor === element) {
+        valueColor = window.utils.getRandomElement(array);
+      }
+      return valueColor;
     }
-    return valueColor;
-  },
-};
+  };
+})();
