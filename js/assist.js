@@ -8,7 +8,6 @@ window.assist = (function () {
   var isKeyboardEvent = function (evt) {
     return typeof evt.keyCode !== 'undefined';
   };
-
   return {
     isDeactivationEvent: function (evt) {
       return isKeyboardEvent(evt) && evt.keyCode === ESCAPE_KEY_CODE;
