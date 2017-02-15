@@ -3,7 +3,6 @@
 window.colorizeElement = (function () {
   return function (element, colors, property, callback) {
     var currentColor;
-
     var randomColor = function (evt) {
       if (evt.type === 'click' || window.assist.isActivationEvent(evt)) {
         currentColor = window.utils.getRandomElementExcept(colors, currentColor);
