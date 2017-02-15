@@ -1,14 +1,10 @@
 'use strict';
 
-var setup = document.querySelector('.setup');
-var userName = setup.querySelector('.setup-user-name');
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = setup.querySelector('.setup-close');
-var wizardCoat = setup.querySelector('#wizard-coat');
-var wizardEyes = setup.querySelector('#wizard-eyes');
-var setupFireball = setup.querySelector('.setup-fireball-wrap');
-var setupSave = setup.querySelector('.setup-submit');
+var wizardCoat = document.querySelector('#wizard-coat');
+var wizardEyes = document.querySelector('#wizard-eyes');
+var setupFireball = document.querySelector('.setup-fireball-wrap');
 
+var userName = document.querySelector('.setup-user-name');
 userName.required = true;
 userName.maxLength = 50;
 
@@ -37,73 +33,59 @@ var setupFireballColors = [
   '#e6e848'
 ];
 
-// Функция определения ENTER_KEY_CODE
-window.isActivateEvent = (function () {
-  var ENTER_KEY_CODE = 13;
-  return function (evt) {
-    return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
-  };
-})();
 
-// Обработчик нажатий на клавиатуру в .setup
-var setupKeydownHandler = (function () {
-  var ESCAPE_KEY_CODE = 27;
-  return function (evt) {
-    if (evt.keyCode === ESCAPE_KEY_CODE) {
-      setup.classList.add('invisible');
+(function () {
+  var setupOpen = document.querySelector('.setup-open-icon');
+  var setupClose = document.querySelector('.setup-close');
+  var setupSave = document.querySelector('.setup-submit');
+
+  // Функция изменения значения Aria роли
+  var statusAriaRole = function (item) {
+    var pressed = (item.getAttribute('aria-pressed') === 'true');
+    item.setAttribute('aria-pressed', !pressed);
+  };
+
+  var onSetupKeydown = function (evt) {
+    if (window.assist.isActivationEvent(evt)) {
+      window.enableSetup.openSetup();
+      window.enableSetup.focusSetupOpen(function () {
+        setupOpen.focus();
+      });
     }
-  };
-})();
-
-// Фунция показа виджета
-var showSetupWidget = function () {
-  setup.classList.remove('invisible');
-  document.addEventListener('keydown', setupKeydownHandler);
-};
-
-// Фунция скрытия виджета
-var hideSetupWidget = function () {
-  setup.classList.add('invisible');
-  document.removeEventListener('keydown', setupKeydownHandler);
-};
-
-// Функция изменения значения Aria роли
-var statusAriaRole = function (item) {
-  var pressed = (item.getAttribute('aria-pressed') === 'true');
-  item.setAttribute('aria-pressed', !pressed);
-};
-
-// Обработчик клика на иконку
-setupOpen.addEventListener('click', function () {
-  showSetupWidget();
-  statusAriaRole(setupOpen);
-});
-
-// Обработчик нажатия на иконку
-setupOpen.addEventListener('keydown', function (evt) {
-  if (window.isActivateEvent(evt)) {
-    showSetupWidget();
     statusAriaRole(setupOpen);
-  }
-});
+  };
 
-// Функция закрытия виждета по нажатию или клику на кнопку
-var closeButton = function (nameButton) {
-  nameButton.addEventListener('click', function () {
-    hideSetupWidget();
-    statusAriaRole(nameButton);
+  // Обработчик клика на иконку
+  setupOpen.addEventListener('click', function () {
+    window.enableSetup.openSetup();
+    statusAriaRole(setupOpen);
   });
-  nameButton.addEventListener('keydown', function (evt) {
-    if (window.isActivateEvent(evt)) {
-      hideSetupWidget();
-      statusAriaRole(nameButton);
-    }
-  });
-};
 
-closeButton(setupClose);
-closeButton(setupSave);
+  // Обработчик нажатия на иконку
+  setupOpen.addEventListener('keydown', onSetupKeydown);
 
-window.colorizeElement(wizardCoat, wizardCoatColors, 'fill');
-window.colorizeElement(wizardEyes, wizardEyesColors, 'fill');
-window.colorizeElement(setupFireball, setupFireballColors, 'background');
+  // Функция закрытия виждета по нажатию или клику на кнопку
+  var closeButton = function (nameButton) {
+    nameButton.addEventListener('click', function () {
+      window.enableSetup.hideSetup();
+    });
+    nameButton.addEventListener('keydown', function (evt) {
+      if (window.assist.isActivationEvent(evt)) {
+        window.enableSetup.hideSetup();
+      }
+    });
+  };
+
+  closeButton(setupClose);
+  closeButton(setupSave);
+})();
+
+(function () {
+  var coloring = function (element, property, currentColor) {
+    element.style[property] = currentColor;
+  };
+
+  window.colorizeElement(wizardCoat, wizardCoatColors, 'fill', coloring);
+  window.colorizeElement(wizardEyes, wizardEyesColors, 'fill', coloring);
+  window.colorizeElement(setupFireball, setupFireballColors, 'background', coloring);
+})();
