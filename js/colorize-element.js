@@ -1,20 +1,19 @@
 'use strict';
 
 window.colorizeElement = (function () {
-  return function (element, colors, property, callback) {
+  return function (element, colors, property) {
     var currentColor;
 
     var randomColor = function (evt) {
-      if (evt.type === 'click' || window.assist.isActivationEvent(evt)) {
+      if (evt.type === 'click' || window.isActivateEvent(evt)) {
         currentColor = window.utils.getRandomElementExcept(colors, currentColor);
-        if (typeof callback === 'function') {
-          callback(element, property, currentColor);
-        }
+        element.style[property] = currentColor;
       }
       return currentColor;
     };
 
     element.addEventListener('click', randomColor);
     element.addEventListener('keydown', randomColor);
+
   };
 })();
