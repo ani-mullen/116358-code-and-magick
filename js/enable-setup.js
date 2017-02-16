@@ -26,9 +26,13 @@ window.enableSetup = (function () {
     }
   };
 
+  var focusSetupOpen = function (callback) {
+    onSetupClose = callback;
+  };
+
   return {
     openSetup: showSetupWidget,
     hideSetup: hideSetupWidget,
-    focusSetupOpen: onSetupClose
+    focusSetupOpen: focusSetupOpen
   };
 })();
