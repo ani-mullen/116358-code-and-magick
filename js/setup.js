@@ -1,5 +1,7 @@
 'use strict';
 
+var URL_DATA = 'https://intensive-javascript-server-myophkugvq.now.sh/code-and-magick/data';
+
 var wizardCoat = document.querySelector('#wizard-coat');
 var wizardEyes = document.querySelector('#wizard-eyes');
 var setupFireball = document.querySelector('.setup-fireball-wrap');
@@ -38,6 +40,8 @@ var setupFireballColors = [
   var setupOpen = document.querySelector('.setup-open-icon');
   var setupClose = document.querySelector('.setup-close');
   var setupSave = document.querySelector('.setup-submit');
+
+  setupSave.style.bottom = '10px';
 
   // Функция изменения значения Aria роли
   var statusAriaRole = function (item) {
@@ -83,9 +87,35 @@ var setupFireballColors = [
 (function () {
   var coloring = function (element, property, currentColor) {
     element.style[property] = currentColor;
+
+    setTimeout(function () {
+      window.load(URL_DATA, window.showSimilarWizards);
+    }, 5000);
   };
 
   window.colorizeElement(wizardCoat, wizardCoatColors, 'fill', coloring);
   window.colorizeElement(wizardEyes, wizardEyesColors, 'fill', coloring);
   window.colorizeElement(setupFireball, setupFireballColors, 'background', coloring);
+})();
+
+(function () {
+  var setup = document.querySelector('.setup');
+  var setupSimilar = document.createElement('div');
+  setupSimilar.className = 'setup-similar';
+  setupSimilar.style.transform = 'translate(0, 400px)';
+  setupSimilar.style.display = 'flex';
+  setupSimilar.style.flexWrap = 'wrap';
+  setupSimilar.style.justifyContent = 'space-around';
+  setup.appendChild(setupSimilar);
+
+  window.showSimilarWizards = function (data) {
+    setupSimilar.innerHTML = '';
+    var wizards = data;
+    var randwizards = [];
+    for (var i = 0; i < 5; i++) {
+      var newWisard = window.utils.getRandomElement(wizards);
+      setupSimilar.appendChild(window.render(newWisard));
+      randwizards[i] = newWisard;
+    }
+  };
 })();
